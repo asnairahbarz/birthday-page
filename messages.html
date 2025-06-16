@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Messages for Dr. Nelia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #fce4ec, #f3e5f5);
+      text-align: center;
+      padding: 30px;
+      animation: fadeIn 1s ease-in;
+    }
+
+    h1 {
+      color: #880e4f;
+      margin-bottom: 10px;
+      font-size: 2rem;
+      animation: slideDown 0.8s ease-out;
+    }
+
+    .message-board {
+      max-width: 700px;
+      margin: auto;
+      margin-top: 30px;
+      text-align: left;
+      animation: fadeIn 1s ease-in;
+    }
+
+    .user-message {
+      background-color: #ffebee;
+      border-left: 6px solid #ec407a;
+      margin: 12px 0;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.4s ease-out forwards;
+    }
+
+    .back-button {
+      margin-top: 20px;
+      background-color: #ab47bc;
+      color: white;
+      padding: 10px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: #8e24aa;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0 }
+      to { opacity: 1 }
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-30px); opacity: 0 }
+      to { transform: translateY(0); opacity: 1 }
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Messages for Dr. Nelia</h1>
+  <div class="message-board" id="messageBoard"></div>
+
+  <button class="back-button" onclick="window.location.href='/'">Back to Greeting</button>
+
+  <script>
+    function loadMessages() {
+      fetch('/messages')
+        .then(res => res.json())
+        .then(data => {
+          const board = document.getElementById('messageBoard');
+          data.forEach((message, index) => {
+            const div = document.createElement('div');
+            div.className = 'user-message';
+            div.textContent = message;
+            div.style.animationDelay = `${index * 0.1}s`;
+            board.appendChild(div);
+          });
+        });
+    }
+
+    loadMessages();
+  </script>
+
+</body>
+</html>

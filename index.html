@@ -2,112 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Happy Birthday Dr. Nelia S. Raganas!</title>
+  <title>Happy Birthday Dr. Nelia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
+      margin: 0;
+      padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #f3e5f5, #ede7f6);
-      padding: 40px;
+      background: linear-gradient(135deg, #ffe0f0, #e0f7fa);
       text-align: center;
+      overflow-x: hidden;
+      animation: fadeIn 2s ease-in;
     }
-    h1 { font-size: 2.5rem; color: #6a1b9a; }
-    p { font-size: 1.2rem; color: #4a148c; }
-    button {
-      background-color: #8e24aa;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 1rem;
-      cursor: pointer;
+
+    .container {
+      padding: 40px 20px;
+      animation: slideUp 1s ease-out;
+    }
+
+    img {
+      width: 260px;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 6px solid #ec407a;
+      box-shadow: 0 0 20px rgba(236, 64, 122, 0.5);
+      animation: bounce 2s infinite;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      color: #d81b60;
       margin-top: 20px;
-      border-radius: 8px;
+      animation: fadeIn 2s ease-out;
     }
-    #messageForm {
-      display: none;
-      margin-top: 20px;
-    }
-    textarea {
-      width: 100%;
-      max-width: 500px;
-      height: 100px;
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-    .message-board {
-      margin-top: 30px;
+
+    p {
+      font-size: 1.2rem;
+      color: #4e148c;
       max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: left;
+      margin: auto;
     }
-    .user-message {
-      background-color: #f8bbd0;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 10px;
+
+    .button {
+      background-color: #ec407a;
+      color: white;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      margin-top: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .button:hover {
+      background-color: #d81b60;
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0 }
+      to { opacity: 1 }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0 }
+      to { transform: translateY(0); opacity: 1 }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
-<body>
+<body onload="document.getElementById('birthdaySong').play()">
 
-  <h1>?? Happy Birthday, Dr. Nelia S. Raganas! ??</h1>
-  <p>We wish you a day filled with love, joy, and sweet moments!</p>
-
-  <button onclick="toggleForm()">Leave a Message</button>
-
-  <div id="messageForm">
-    <textarea id="userMessage" placeholder="Write your message here..."></textarea><br>
-    <button onclick="submitMessage()">Submit Message</button>
+  <div class="container">
+    <img src="celebrant.jpg" alt="Dr. Nelia S. Raganas" />
+    <h1>Happy Birthday Dr. Nelia S. Raganas</h1>
+    <p>Wishing you a day filled with joy, love, and unforgettable moments. May this birthday bring you endless happiness!</p>
+    <button class="button" onclick="window.location.href='messages.html'">See Messages</button>
+    <audio id="birthdaySong" autoplay loop>
+      <source src="birthday.mp3" type="audio/mp3" />
+    </audio>
   </div>
-
-  <div class="message-board" id="messageBoard">
-    <h3>?? Birthday Wishes from Friends:</h3>
-  </div>
-
-  <script>
-    function toggleForm() {
-      const form = document.getElementById("messageForm");
-      form.style.display = form.style.display === "none" ? "block" : "none";
-    }
-
-    function submitMessage() {
-      const message = document.getElementById("userMessage").value;
-      if (message.trim() === "") return alert("Please write a message!");
-
-      fetch("/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
-      })
-      .then(res => res.json())
-      .then(data => {
-        appendMessage(data.message);
-        document.getElementById("userMessage").value = "";
-      });
-    }
-
-    function appendMessage(message) {
-      const messageBoard = document.getElementById("messageBoard");
-      const newMessage = document.createElement("div");
-      newMessage.className = "user-message";
-      newMessage.innerText = message;
-      messageBoard.appendChild(newMessage);
-    }
-
-    function loadMessages() {
-      fetch("/messages")
-        .then(res => res.json())
-        .then(data => {
-          data.forEach(msg => appendMessage(msg));
-        });
-    }
-
-    loadMessages();
-  </script>
 
 </body>
 </html>
