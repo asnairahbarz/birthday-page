@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Dr. Nelia S. Raganas!</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #f3e5f5, #ede7f6);
+      padding: 40px;
+      text-align: center;
+    }
+    h1 { font-size: 2.5rem; color: #6a1b9a; }
+    p { font-size: 1.2rem; color: #4a148c; }
+    button {
+      background-color: #8e24aa;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+    #messageForm {
+      display: none;
+      margin-top: 20px;
+    }
+    textarea {
+      width: 100%;
+      max-width: 500px;
+      height: 100px;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .message-board {
+      margin-top: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+    .user-message {
+      background-color: #f8bbd0;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>?? Happy Birthday, Dr. Nelia S. Raganas! ??</h1>
+  <p>We wish you a day filled with love, joy, and sweet moments!</p>
+
+  <button onclick="toggleForm()">Leave a Message</button>
+
+  <div id="messageForm">
+    <textarea id="userMessage" placeholder="Write your message here..."></textarea><br>
+    <button onclick="submitMessage()">Submit Message</button>
+  </div>
+
+  <div class="message-board" id="messageBoard">
+    <h3>?? Birthday Wishes from Friends:</h3>
+  </div>
+
+  <script>
+    function toggleForm() {
+      const form = document.getElementById("messageForm");
+      form.style.display = form.style.display === "none" ? "block" : "none";
+    }
+
+    function submitMessage() {
+      const message = document.getElementById("userMessage").value;
+      if (message.trim() === "") return alert("Please write a message!");
+
+      fetch("/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      })
+      .then(res => res.json())
+      .then(data => {
+        appendMessage(data.message);
+        document.getElementById("userMessage").value = "";
+      });
+    }
+
+    function appendMessage(message) {
+      const messageBoard = document.getElementById("messageBoard");
+      const newMessage = document.createElement("div");
+      newMessage.className = "user-message";
+      newMessage.innerText = message;
+      messageBoard.appendChild(newMessage);
+    }
+
+    function loadMessages() {
+      fetch("/messages")
+        .then(res => res.json())
+        .then(data => {
+          data.forEach(msg => appendMessage(msg));
+        });
+    }
+
+    loadMessages();
+  </script>
+
+</body>
+</html>
